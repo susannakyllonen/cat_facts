@@ -5,6 +5,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
+import "./styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
@@ -32,9 +33,7 @@ const App = () => {
         <Row>
           <Col>
             {loadingData && <Spinner animation="border" variant="primary" />}
-            <h1 style={{ color: "green" }} className="headline">
-              Cat Facts
-            </h1>
+            <h1 className="headline">Cat Facts</h1>
 
             {data.map(facts => {
               return (
