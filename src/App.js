@@ -1,62 +1,60 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
 import "./styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+
+const baseUrl = "https://cat-fact.herokuapp.com/facts/";
+const listUrl = baseUrl + "random?animal_type=cat&amount=5";
 
 const App = () => {
   const [data, setData] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
-
+  const loadData = useCallback(async () => {
+    try {
+      setLoadingData(true);
+      const resp = await fetch(listUrl);
+      const data = await resp.json();
+      setData(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingData(false);
+    }
+  }, [setData, setLoadingData]);
   useEffect(() => {
-    fetchdata();
-  }, []);
+    loadData();
+  }, [loadData]);
 
-  const fetchdata = async () => {
-    setLoadingData(true);
-    const response = await fetch(
-      "https://cat-fact.herokuapp.com/facts/random?animal_type=cat&amount=5"
-    );
-    const data = await response.json();
-    console.log(data);
-    setData(data);
-    setLoadingData(false);
-  };
+  // There doesn't seem to be a human-readable URL for the facts, so using the API permalink
 
   return (
-    <Fragment>
-      <Container className="container">
-        <Row>
-          <Col>
-            {loadingData && <Spinner animation="border" variant="primary" />}
-            <h1 className="headline">Cat Facts</h1>
+    <>
+      {loadingData && (
+        <Spinner
+          className="loadingSpinner"
+          animation="border"
+          variant="primary"
+        />
+      )}
+      <h1 className="headline">Cat Facts</h1>
+      <textarea
+        className="infoText"
+        rows={10}
+        value={data.map(e => `[${e.text}] (${baseUrl}${e._id})`).join("\n")}
+      />
 
-            {data.map(facts => {
-              return (
-                <Card className="infotext">
-                  <Card.Body key={facts.id}>{facts.text}</Card.Body>
-                </Card>
-              );
-            })}
-            {!loadingData && (
-              <Button
-                className="buttonMargin"
-                variant="primary"
-                size="lg"
-                onClick={() => fetchdata()}
-              >
-                More Cat Facts!
-              </Button>
-            )}
-          </Col>
-        </Row>
-      </Container>
-    </Fragment>
+      {!loadingData && (
+        <Button
+          className="buttonMargin"
+          variant="primary"
+          size="lg"
+          onClick={() => loadData()}
+        >
+          More Cat Facts!
+        </Button>
+      )}
+    </>
   );
 };
-
 export default App;
