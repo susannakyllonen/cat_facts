@@ -1,3 +1,7 @@
+This lightweight frontend application created with React
+fetches 5 random cat facts from an open API: https://alexwohlbruck.github.io/cat-facts/docs/.
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
