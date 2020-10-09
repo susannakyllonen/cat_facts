@@ -26,8 +26,6 @@ const App = () => {
     loadData();
   }, [loadData]);
 
-  // There doesn't seem to be a human-readable URL for the facts, so using the API permalink
-
   return (
     <>
       {loadingData && (
@@ -41,7 +39,7 @@ const App = () => {
       <textarea
         className="infoText"
         rows={10}
-        value={data.map(e => `[${e.text}] (${baseUrl}${e._id})`).join("\n")}
+        value={data.map(e => `${e.text}`).join("\n")}
       />
 
       {!loadingData && (
