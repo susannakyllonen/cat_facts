@@ -7,21 +7,23 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const baseUrl = "https://cat-fact.herokuapp.com/facts/";
 const listUrl = baseUrl + "random?animal_type=cat&amount=5";
 
+const getsData = (setData, setLoadingData) => async () => {
+  try {
+    setLoadingData(true);
+    const resp = await fetch(listUrl);
+    const data = await resp.json();
+    setData(data);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setLoadingData(false);
+  }
+};
+
 const App = () => {
   const [data, setData] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
-  const loadData = useCallback(async () => {
-    try {
-      setLoadingData(true);
-      const resp = await fetch(listUrl);
-      const data = await resp.json();
-      setData(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoadingData(false);
-    }
-  }, [setData, setLoadingData]);
+  const loadData = useCallback(getsData(setData, setLoadingData), []);
   useEffect(() => {
     loadData();
   }, [loadData]);
@@ -39,7 +41,7 @@ const App = () => {
       <textarea
         className="infoText"
         rows={10}
-        value={data.map(e => `${e.text}`).join("\n")}
+        value={data.map(item => `${item.text}`).join("\n")}
       />
 
       {!loadingData && (
@@ -47,7 +49,7 @@ const App = () => {
           className="buttonMargin"
           variant="primary"
           size="lg"
-          onClick={() => loadData()}
+          //onClick={() => loadData()}
         >
           More Cat Facts!
         </Button>

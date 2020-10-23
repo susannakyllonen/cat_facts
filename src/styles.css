@@ -1,4 +1,3 @@
-html,
 body {
   height: 100%;
 }
@@ -13,13 +12,12 @@ body {
   color: green;
   margin: 0 0 0 60px;
 }
-
 .buttonMargin {
   margin: 50px;
 }
 
 .infoText {
   width: 100%;
-  margin: 35px;
-  padding: 40px;
+  margin: 50px;
+  padding: 30px;
 }
